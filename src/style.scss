@@ -176,6 +176,12 @@
         }
         .chat{
             flex: 2;
+
+            .chatInfo{
+                height: 50px;
+                background-color: #5d5b8d;
+                display: flex;
+            }
         }
     }
 }
