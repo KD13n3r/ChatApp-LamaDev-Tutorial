@@ -48,6 +48,19 @@ const Search = () => {
       if (!res.exist()) {
         // creat chat in chats collection
         await setDoc(doc, (db, "chats", combinedId), { messages: [] });
+
+        //create user chats
+        userChats:{
+          janesId:{
+            combinedId:{
+              userInfo{
+                dn,img,id
+              },
+              lastMessge:"",
+              date:
+            }
+          }
+        }
       }
     } catch (err) {}
   };
