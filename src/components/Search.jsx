@@ -50,17 +50,17 @@ const Search = () => {
         await setDoc(doc, (db, "chats", combinedId), { messages: [] });
 
         //create user chats
-        userChats:{
-          janesId:{
-            combinedId:{
-              userInfo{
-                dn,img,id
-              },
-              lastMessge:"",
-              date:
-            }
-          }
-        }
+        // userChats:{
+        //   janesId:{
+        //     combinedId:{
+        //       userInfo{
+        //         dn,img,id
+        //       },
+        //       lastMessge:"",
+        //       date:
+        //     }
+        //   }
+        // }
       }
     } catch (err) {}
   };
