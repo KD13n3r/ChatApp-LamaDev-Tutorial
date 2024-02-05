@@ -28,12 +28,12 @@ const Chats = () => {
       {Object.entries(chats)?.map((chat)=>(
       <div className="userChat" key={chat[0]}>
         <img
-          src="https://images.pexels.com/photos/19951472/pexels-photo-19951472/free-photo-of-buck-in-a-snowstorm.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+          src={chat[1].userInfo.photoURL}
           alt=""
         />
         <div className="userChatInfo">
-          <span>Jane</span>
-          <p>Hello</p>
+          <span>{chat[1].displayName}</span>
+          <p>{chat[1].lastMessage?.text}</p>
         </div> 
       </div>
       ))}
