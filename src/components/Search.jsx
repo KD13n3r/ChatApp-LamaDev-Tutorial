@@ -6,6 +6,8 @@ import {
   getDocs,
   setDoc,
   doc,
+  updateDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { AuthContext } from "../context/AuthContext";
@@ -47,20 +49,17 @@ const Search = () => {
 
       if (!res.exist()) {
         // creat chat in chats collection
-        await setDoc(doc, (db, "chats", combinedId), { messages: [] });
+        await setDoc(doc(db, "chats", combinedId), { messages: [] });
 
         //create user chats
-        // userChats:{
-        //   janesId:{
-        //     combinedId:{
-        //       userInfo{
-        //         dn,img,id
-        //       },
-        //       lastMessge:"",
-        //       date:
-        //     }
-        //   }
-        // }
+        await updateDoc(doc(db, "userChats", currentUser.uid), {
+          [combinedId + ".userInfo"]: {
+            uid: user.uid,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+          },
+          [combinedId + ".date"]: serverTimestamp(),
+        });
       }
     } catch (err) {}
   };
