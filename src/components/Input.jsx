@@ -6,6 +6,8 @@ import { ChatContext } from "../context/ChatContext";
 import { Timestamp, arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { v4 as uuid } from "uuid";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../firebase";
 
 const Input = () => {
   const [text, setText] = useState("");
@@ -16,16 +18,53 @@ const Input = () => {
 
   const handleSend = async () => {
     if (img) {
+      const storageRef = ref(storage, uuid());
+
+      const uploadTask = uploadBytesResumable(storageRef, img);
+      uploadTask.on(
+        (error) => {
+          // setErr(true);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            await updateDoc(doc(db, "chats", data.chatId), {
+              messages: arrayUnion({
+                id: uuid(),
+                text,
+                senderId: currentUser.uid,
+                date: Timestamp.now(),
+                img: downloadURL,
+              }),
+            });
+          });
+        }
+      );
     } else {
       await updateDoc(doc(db, "chats", data.chatId), {
         messages: arrayUnion({
-          id: uuid,
+          id: uuid(),
           text,
           senderId: currentUser.uid,
           date: Timestamp.now(),
         }),
       });
     }
+
+    await updateDoc(doc(db, "userChats", currentUser.uid), {
+      [(data.chatId = ".lastMessage")]: {
+        text,
+      },
+      [data.chatId + ".date"]: Timestamp(),
+    });
+    await updateDoc(doc(db, "userChats", data.user.uid), {
+      [(data.chatId = ".lastMessage")]: {
+        text,
+      },
+      [data.chatId + ".date"]: Timestamp(),
+    });
+
+    setText("");
+    setImg(null);
   };
   return (
     <div className="input">
