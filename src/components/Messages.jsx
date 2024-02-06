@@ -20,15 +20,9 @@ const Messages = () => {
 
   return (
     <div className="messages">
-    
-      <Message />
-      <Message />
-      <Message />
-      <Message />
-      <Message />
-      <Message />
-      <Message />
-      <Message />
+      {messages.map((m) => (
+        <Message messages={m} />
+      ))}
     </div>
   );
 };
